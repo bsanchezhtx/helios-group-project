@@ -34,6 +34,9 @@ def intensity_estimation(data, plot=False, levels=10):
 
         # plotting the scatterplot on top of the kde plot
         plt.scatter(x, y, s=0.5, facecolor='white')
+
+        # don't show the plot
+        plt.close()
         
         # saving the figure to the output folder
         date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
