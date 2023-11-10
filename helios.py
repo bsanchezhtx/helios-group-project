@@ -37,10 +37,6 @@ def intensity_estimation(data, plot=False, levels=10):
 
         # don't show the plot
         plt.close()
-        
-        # saving the figure to the output folder
-        date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
-        plt.savefig(f"./output/task2/intensity_frequency{date_range}.png")
 
         # return the values for the contours, which can serve as threshold values for hotspot analysis
         return ticks
