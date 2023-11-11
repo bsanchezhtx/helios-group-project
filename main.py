@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     s1 = dfs_04[-1]
     s2 = dfs_15[-1]
-    helios.intensity_estimation_frequency(s1, plot=True, show=False, scatter=False, levels=100)
+    helios.intensity_estimation_frequency(s1, plot=True, show=False, scatter=True, levels=100)
     helios.intensity_estimation_energy(s1, plot=True, show=False, scatter=True, levels=100)
     helios.intensity_estimation_frequency(s2, plot=True, show=False, scatter=True, levels=100)
     helios.intensity_estimation_energy(s2, plot=True, show=False, scatter=True, levels=100)
