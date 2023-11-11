@@ -8,7 +8,8 @@
 - [x] Task 1: Solar Flare Intensity Estimation
     - [x] Method 1: Frequency Based
     - [x] Method 2: Energy Based
-- [ ] Task 2: Hotspot Discovery and Analysis
+- [x] Task 2: Hotspot Discovery and Analysis
     - [x] Thresholds `d1` and `d2`
-    - [ ] Time Series for both types of hotspots 
+    - [x] Time Series for both types of hotspots 
 - [ ] Task 3: Change Analysis for Solar Flares
+    - [ ] Visual analysis of intensities 

@@ -11,7 +11,7 @@ class Helios:
     def __init__(self):
         pass
     
-    def map_and_normalize(data):
+    def __map_and_normalize(self, data):
         # maps energy band to average energy
         energy_band_mapping = {    
             '6-12': 9,
@@ -45,7 +45,7 @@ class Helios:
     # used to either get an array of intensity estimations, 
     # a plot if plot=True and thresh=False, 
     # or just list of probability density values if plot=True and thresh=True
-    def intensity_estimation_frequency(data, plot=False, scatter=True, thresh=False, levels=10):
+    def intensity_estimation_frequency(self, data, plot=False, scatter=True, thresh=False, levels=10):
         # getting the x, y, and total.counts values in numpy arrays
         x = data['x.pos.asec'].values.flatten()
         y = data['y.pos.asec'].values.flatten()
@@ -88,11 +88,13 @@ class Helios:
                     plt.scatter(x, y, s=0.5, facecolor='white')
 
                 # title
-                ax.set_title(f"Solar Flare Intensity Method 1 for Months {data['month'].min()}-{data['month'].max()}")
+                plt.suptitle("Frequency Based Intensities (Method 1)")
+                ax.set_title(f"Year {data['year'].iloc[0]}, Months {data['month'].min()}-{data['month'].max()}")
                 
                 # saving the figure to the output folder
                 date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
                 plt.savefig(f"./output/intensity_frequency_{date_range}.png")
+
                 plt.show()
 
                 return fig, ax
@@ -109,22 +111,23 @@ class Helios:
     # from task1.ipynb    
     # gets the energy based intensity values if plot=False,
     # or a plot if plot=True    
-    def intensity_estimation_energy(self, plot=False, scatter=True, levels=10):
+    def intensity_estimation_energy(self, data, plot=False, scatter=True, levels=10):
         # adding the new intensity values for the data
-        #data = self.__map_and_normalize(data)
+        data = self.__map_and_normalize(data)
 
         # energy-based intensity data
-        intensity = self['intensity.method.2'].values.flatten()
+        intensity = data['intensity.method.2'].values.flatten()
+
         # x and y values
-        x = self['x.pos.asec'].values.flatten()
-        y = self['y.pos.asec'].values.flatten()
+        x = data['x.pos.asec'].values.flatten()
+        y = data['y.pos.asec'].values.flatten()
 
         if plot:
             # new matplotlib figure
             fig, ax = plt.subplots()
             
             # seaborn kde plot, uses scipy gaussian_kde underneath
-            ax = sns.kdeplot(data=self, x='x.pos.asec', y='y.pos.asec',
+            ax = sns.kdeplot(data=data, x='x.pos.asec', y='y.pos.asec',
                             weights='intensity.method.2', fill=True, levels=levels, 
                             thresh=0, cmap='inferno', cbar=True, bw_method='scott')
 
@@ -144,9 +147,12 @@ class Helios:
                 # plotting the scatterplot on top of the kde plot
                 plt.scatter(x, y, s=0.2, facecolor='white')
 
-            ax.set_title(f"Solar Flare Intensity Method 2 for Months {self['month'].min()}-{self['month'].max()}")
-            date_range = f"{self['year'].iloc[0]}_{self['month'].min()}-{self['month'].max()}"
+            plt.suptitle("Energy Based Intensities (Method 2)")
+            ax.set_title(f"Year {data['year'].iloc[0]}, Months {data['month'].min()}-{data['month'].max()}")
+
+            date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
             plt.savefig(f"./output/intensity_energy_{date_range}.png")
+
             plt.show()
 
             return fig, ax
@@ -154,10 +160,9 @@ class Helios:
             return intensity
         
     # from task2.ipynb
-    # averages all the potential threshold values across a set of pandas dataframes
-    # and returns d2 and d1
-    # levels should have two values for this to work right
-    def thresholds(self, dataframes, levels=[0.5, 0.99]):
+    # averages all the potential threshold values across a set of pandas dataframes and returns them
+    # from there you can select threhold values with ticks[2], ticks[3] etc.
+    def thresholds(self, dataframes, levels=[0, 0.25, 0.5, 0.95, 1]):
         ticks = []
 
         # loop through each subset
@@ -172,5 +177,5 @@ class Helios:
         # hotspots and t[3] for the intense hotspots
         t = np.mean(ticks, axis=0)
 
-        # returning d2, d1
-        return (t[0], t[1])
+        # returning average threshold values
+        return ticks
