@@ -162,20 +162,23 @@ class Helios:
     # from task2.ipynb
     # averages all the potential threshold values across a set of pandas dataframes and returns them
     # from there you can select threhold values with ticks[2], ticks[3] etc.
-    def thresholds(self, dataframes, levels=[0.2, 0.50, 0.65, 0.95, 1]):
+    def thresholds(data):
+        """For each subset of data, get the potential threshold values for hotspots"""
+        
         ticks = []
+        helios = Helios()
 
         # loop through each subset
-        for set in dataframes:
+        for set in data:
             # append the potential threshold values to the ticks list
             # a level value of [0, 0.25, 0.5, 0.75, 1] will return 5 intensity values where each
-            # corresponds with a probability mass of 0%, 25%, and so on
-            ticks.append(self.intensity_estimation_frequency(set, plot=True, thresh=True, levels=levels))
+            # corresponds with a probability mass of 20%, 50%, and so on
+            ticks.append(helios.intensity_estimation_frequency(data=set, plot=True, thresh=True, levels=[0.2, 0.50, 0.65, 0.99, 1]))
         
         # numpy mean will get the element-wise mean for all the potential threshold values
         # from here, we can select the d1 and d2 threshold values from this list, like t[2] for the med
         # hotspots and t[3] for the intense hotspots
         t = np.mean(ticks, axis=0)
 
-        # returning average threshold values
-        return ticks
+        # returning d2, d1
+        return (t[2], t[3])
