@@ -68,6 +68,7 @@ class Helios:
 
             if thresh:
                 # just return the values for the contours, which can serve as threshold values for hotspot analysis
+                plt.close()
                 return ticks
             else:
                 # Setting the background color of the plot 
@@ -108,7 +109,7 @@ class Helios:
     # from task1.ipynb    
     # gets the energy based intensity values if plot=False,
     # or a plot if plot=True    
-    def intensity_estimation_energy(self, data, plot=False, levels=10):
+    def intensity_estimation_energy(self, data, plot=False, scatter=True, levels=10):
         # adding the new intensity values for the data
         data = self.__map_and_normalize(data)
 
@@ -139,8 +140,9 @@ class Helios:
             cb = ax.collections[-1].colorbar
             cb.set_label('Mean Intensity')
 
-            # plotting the scatterplot on top of the kde plot
-            plt.scatter(x, y, s=0.2, facecolor='white')
+            if scatter:
+                # plotting the scatterplot on top of the kde plot
+                plt.scatter(x, y, s=0.2, facecolor='white')
 
             ax.set_title(f"Solar Flare Intensity Method 2 for Months {data['month'].min()}-{data['month'].max()}")
             date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
