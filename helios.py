@@ -162,7 +162,7 @@ class Helios:
     # from task2.ipynb
     # averages all the potential threshold values across a set of pandas dataframes and returns them
     # from there you can select threhold values with ticks[2], ticks[3] etc.
-    def thresholds(self, dataframes, levels=[0.2, 0.50, 0.65, 0.90, 1]):
+    def thresholds(self, dataframes, levels=[0.2, 0.50, 0.65, 0.95, 1]):
         ticks = []
 
         # loop through each subset
