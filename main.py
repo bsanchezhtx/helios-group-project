@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import cv2
 from helios import Helios
 
 if __name__ == '__main__':
@@ -34,14 +36,108 @@ if __name__ == '__main__':
     for i in range(20, 25, 2):
         dfs_15.append(pd.concat([df_n.get_group(i - 3), df_n.get_group(i - 2), df_n.get_group(i - 1), df_n.get_group(i)]))
 
-
-
     helios = Helios()
 
     s1 = dfs_04[0]
     s2 = dfs_15[0]
 
-    helios.intensity_estimation_frequency(s1, True, levels=100)
-    helios.intensity_estimation_energy(s1, plot=True, levels=100)
-    helios.intensity_estimation_frequency(s2, plot=True, levels=100)
-    helios.intensity_estimation_energy(s2, plot=True, levels=100)
+    helios.intensity_estimation_frequency(s1, False, levels=100)
+    helios.intensity_estimation_energy(s1, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
+    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+
+    # plot figure month 1-4
+    fig1 = plt.figure()
+    row = 2
+    columns = 2
+    image1 = cv2.imread('output/intensity_frequency_2004_1-4.png')
+    image2 = cv2.imread('output/intensity_energy_2004_1-4.png')
+    image3 = cv2.imread('output/intensity_frequency_2015_1-4.png')
+    image4 = cv2.imread('output/intensity_energy_2015_1-4.png')
+
+    fig1.add_subplot(row, columns, 1)
+    plt.imshow(image1)
+    plt.axis('off')
+
+    fig1.add_subplot(row, columns, 2)
+    plt.imshow(image2)
+    plt.axis('off')
+
+    fig1.add_subplot(row, columns, 3)
+    plt.imshow(image3)
+    plt.axis('off')
+
+    fig1.add_subplot(row, columns, 4)
+    plt.imshow(image4)
+    plt.axis('off')
+
+    plt.savefig(f"./output/Months_1-4_groupings.png")
+
+    # plot figure months 21-24
+    s1 = dfs_04[-1]
+    s2 = dfs_15[-1]
+    helios.intensity_estimation_frequency(s1, False, levels=100)
+    helios.intensity_estimation_energy(s1, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
+    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+
+    fig2 = plt.figure()
+    row = 2
+    columns = 2
+    image1 = cv2.imread('output/intensity_frequency_2005_21-24.png')
+    image2 = cv2.imread('output/intensity_energy_2005_21-24.png')
+    image3 = cv2.imread('output/intensity_frequency_2016_21-24.png')
+    image4 = cv2.imread('output/intensity_energy_2016_21-24.png')
+
+    fig2.add_subplot(row, columns, 1)
+    plt.imshow(image1)
+    plt.axis('off')
+
+    fig2.add_subplot(row, columns, 2)
+    plt.imshow(image2)
+    plt.axis('off')
+
+    fig2.add_subplot(row, columns, 3)
+    plt.imshow(image3)
+    plt.axis('off')
+
+    fig2.add_subplot(row, columns, 4)
+    plt.imshow(image4)
+    plt.axis('off')
+
+    plt.savefig(f"./output/Months_21-24_groupings.png")
+
+    # plot figure 24 months
+    s1 = df_04
+    s2 = df_15
+    helios.intensity_estimation_frequency(s1, False, levels=100)
+    helios.intensity_estimation_energy(s1, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
+    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+
+    fig3 = plt.figure()
+    row = 2
+    columns = 2
+    image1 = cv2.imread('output/intensity_frequency_2004_1-24.png')
+    image2 = cv2.imread('output/intensity_energy_2004_1-24.png')
+    image3 = cv2.imread('output/intensity_frequency_2015_1-24.png')
+    image4 = cv2.imread('output/intensity_energy_2015_1-24.png')
+
+    fig3.add_subplot(row, columns, 1)
+    plt.imshow(image1)
+    plt.axis('off')
+
+    fig3.add_subplot(row, columns, 2)
+    plt.imshow(image2)
+    plt.axis('off')
+
+    fig3.add_subplot(row, columns, 3)
+    plt.imshow(image3)
+    plt.axis('off')
+
+    fig3.add_subplot(row, columns, 4)
+    plt.imshow(image4)
+    plt.axis('off')
+
+    plt.savefig(f"./output/Months_1-24_groupings.png")
+
