@@ -1,5 +1,3 @@
-"""Helper module to pass various functions between jupyter notebooks"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,9 +41,9 @@ class Helios:
 
     # from task1.ipynb
     # used to either get an array of intensity estimations, 
-    # a plot if plot=True and thresh=False, 
-    # or just list of probability density values if plot=True and thresh=True
-    def intensity_estimation_frequency(self, data, plot=False, scatter=True, thresh=False, levels=10):
+    # a plot if plot=True, 
+    # or just list of probability density values if thresh=True
+    def intensity_estimation_frequency(self, data, plot=False, show=True, scatter=False, thresh=False, levels=10):
         # getting the x, y, and total.counts values in numpy arrays
         x = data['x.pos.asec'].values.flatten()
         y = data['y.pos.asec'].values.flatten()
@@ -60,44 +58,56 @@ class Helios:
                             weights='total.counts', fill=True, levels=levels, 
                             thresh=0, cmap='magma', cbar=True, ax=ax)
             
+            # setting the background color of the plot 
+            ax.set_facecolor("black")
+
+            # getting colorbar
+            cb = ax.collections[-1].colorbar
+
+            # color bar label
+            cb.set_label('Intensity (Frequency-Based)')
+
+            # adjusting domain and range
+            ax.set_xlim(-1100, 1100)
+            ax.set_ylim(-1100, 1100)
+
+            if scatter:
+                # plotting the scatterplot on top of the kde plot
+                plt.scatter(x, y, s=0.5, facecolor='white')
+
+            # title
+            plt.suptitle('Method 1 (Frequency-Based)')
+            ax.set_title(f"Year {data['year'].iloc[0]}, Months {data['month'].min()}-{data['month'].max()}")
+            
+            # saving the figure to the output folder
+            date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
+            plt.savefig(f"./output/intensity_frequency_{date_range}.png")
+            
+            if show:
+                plt.show()
+            else:
+                plt.close()
+
+            return fig, ax
+        elif thresh:
+            # new matplotlib figure
+            fig, ax = plt.subplots()
+
+            # seaborn kde plot, uses scipy gaussian_kde underneath
+            sns.kdeplot(data=data, x='x.pos.asec', y='y.pos.asec', 
+                            weights='total.counts', fill=True, levels=levels, 
+                            thresh=0, cmap='magma', cbar=True, ax=ax)
+            
             # getting colorbar
             cb = ax.collections[-1].colorbar
             
             # retrieving the tick values for the colorbar, can be used as threshold values 
             ticks = cb.get_ticks()
 
-            if thresh:
-                # just return the values for the contours, which can serve as threshold values for hotspot analysis
-                plt.close()
-                return ticks
-            else:
-                # Setting the background color of the plot 
-                # using set_facecolor() method
-                ax.set_facecolor("black")
+            # don't show the plot
+            plt.close()
 
-                # color bar label
-                cb.set_label('Intensity')
-
-
-                # adjusting domain and range
-                ax.set_xlim(-1100, 1100)
-                ax.set_ylim(-1100, 1100)
-
-                if scatter:
-                    # plotting the scatterplot on top of the kde plot
-                    plt.scatter(x, y, s=0.5, facecolor='white')
-
-                # title
-                plt.suptitle("Frequency Based Intensities (Method 1)")
-                ax.set_title(f"Year {data['year'].iloc[0]}, Months {data['month'].min()}-{data['month'].max()}")
-                
-                # saving the figure to the output folder
-                date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
-                plt.savefig(f"./output/intensity_frequency_{date_range}.png")
-
-                plt.show()
-
-                return fig, ax
+            return ticks
         else:
             # data from the subset to be passed to gaussian kernel
             training_locations = np.vstack([x, y])
@@ -111,7 +121,7 @@ class Helios:
     # from task1.ipynb    
     # gets the energy based intensity values if plot=False,
     # or a plot if plot=True    
-    def intensity_estimation_energy(self, data, plot=False, scatter=True, levels=10):
+    def intensity_estimation_energy(self, data, plot=False, show=True, scatter=True, levels=10):
         # adding the new intensity values for the data
         data = self.__map_and_normalize(data)
 
@@ -131,8 +141,7 @@ class Helios:
                             weights='intensity.method.2', fill=True, levels=levels, 
                             thresh=0, cmap='inferno', cbar=True, bw_method='scott')
 
-            # Setting the background color of the plot 
-            # using set_facecolor() method
+            # setting the background color of the plot 
             ax.set_facecolor("black")
 
             # adjusting domain and range
@@ -141,19 +150,21 @@ class Helios:
 
             # color bar and label
             cb = ax.collections[-1].colorbar
-            cb.set_label('Mean Intensity')
+            cb.set_label('Intensity (Energy-Based)')
 
             if scatter:
                 # plotting the scatterplot on top of the kde plot
                 plt.scatter(x, y, s=0.2, facecolor='white')
-
-            plt.suptitle("Energy Based Intensities (Method 2)")
+            plt.suptitle('Method 2 (Energy-Based)')
             ax.set_title(f"Year {data['year'].iloc[0]}, Months {data['month'].min()}-{data['month'].max()}")
 
             date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
             plt.savefig(f"./output/intensity_energy_{date_range}.png")
 
-            plt.show()
+            if show:
+                plt.show()
+            else:
+                plt.close()
 
             return fig, ax
         else:
@@ -161,24 +172,20 @@ class Helios:
         
     # from task2.ipynb
     # averages all the potential threshold values across a set of pandas dataframes and returns them
-    # from there you can select threhold values with ticks[2], ticks[3] etc.
-    def thresholds(data):
-        """For each subset of data, get the potential threshold values for hotspots"""
+    # from there you can select threhold values with t[2], t[3] etc.
+    def thresholds(self, data, levels=[0, 0.25, 0.5, 0.95, 1]):
         
         ticks = []
-        helios = Helios()
 
         # loop through each subset
         for set in data:
             # append the potential threshold values to the ticks list
             # a level value of [0, 0.25, 0.5, 0.75, 1] will return 5 intensity values where each
-            # corresponds with a probability mass of 20%, 50%, and so on
-            ticks.append(helios.intensity_estimation_frequency(data=set, plot=True, thresh=True, levels=[0.2, 0.50, 0.65, 0.99, 1]))
+            # corresponds with a probability mass of 25%, 50%, and so on
+            ticks.append(self.intensity_estimation_frequency(data=set, plot=True, thresh=True, levels=levels))
         
         # numpy mean will get the element-wise mean for all the potential threshold values
-        # from here, we can select the d1 and d2 threshold values from this list, like t[2] for the med
-        # hotspots and t[3] for the intense hotspots
         t = np.mean(ticks, axis=0)
 
-        # returning d2, d1
-        return (t[2], t[3])
+        # returning the average threshold values
+        return t

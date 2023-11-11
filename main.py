@@ -30,6 +30,7 @@ if __name__ == '__main__':
     dfs_15 = []
     df_n = df_15.groupby(['month'])
 
+    # accounting for the lack of data for months 3 and 4 in 2015
     for i in range(4, 14, 2):
         dfs_15.append(pd.concat([df_n.get_group(i - 3), df_n.get_group(i - 2), df_n.get_group(i - 1), df_n.get_group(i)]))
 
@@ -37,19 +38,21 @@ if __name__ == '__main__':
         dfs_15.append(pd.concat([df_n.get_group(i - 3), df_n.get_group(i - 2), df_n.get_group(i - 1), df_n.get_group(i)]))
 
     helios = Helios()
+    row = 2
+    columns = 2
 
     s1 = dfs_04[0]
     s2 = dfs_15[0]
 
-    helios.intensity_estimation_frequency(s1, False, levels=100)
-    helios.intensity_estimation_energy(s1, plot=False, levels=100)
-    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
-    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s1, plot=True, show=False, scatter=True, levels=100)
+    helios.intensity_estimation_energy(s1, plot=True, show=False, scatter=True, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=True, show=False, scatter=True, levels=100)
+    helios.intensity_estimation_energy(s2, plot=True, show=False, scatter=True, levels=100)
 
-    # plot figure month 1-4
+    # plot months 1-4 for each data set
+
     fig1 = plt.figure()
-    row = 2
-    columns = 2
+    plt.suptitle('Difference in Intensities for Months 1-4 of the Two datasets')
     image1 = cv2.imread('output/intensity_frequency_2004_1-4.png')
     image2 = cv2.imread('output/intensity_energy_2004_1-4.png')
     image3 = cv2.imread('output/intensity_frequency_2015_1-4.png')
@@ -60,11 +63,11 @@ if __name__ == '__main__':
     plt.axis('off')
 
     fig1.add_subplot(row, columns, 2)
-    plt.imshow(image2)
+    plt.imshow(image3)
     plt.axis('off')
 
     fig1.add_subplot(row, columns, 3)
-    plt.imshow(image3)
+    plt.imshow(image2)
     plt.axis('off')
 
     fig1.add_subplot(row, columns, 4)
@@ -73,17 +76,19 @@ if __name__ == '__main__':
 
     plt.savefig(f"./output/Months_1-4_groupings.png")
 
-    # plot figure months 21-24
+    # computing plots for months 21-24 for each dataset
+
     s1 = dfs_04[-1]
     s2 = dfs_15[-1]
-    helios.intensity_estimation_frequency(s1, False, levels=100)
-    helios.intensity_estimation_energy(s1, plot=False, levels=100)
-    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
-    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s1, plot=True, show=False, scatter=False, levels=100)
+    helios.intensity_estimation_energy(s1, plot=True, show=False, scatter=True, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=True, show=False, scatter=True, levels=100)
+    helios.intensity_estimation_energy(s2, plot=True, show=False, scatter=True, levels=100)
+
+    # plot months 21-24 for each data set
 
     fig2 = plt.figure()
-    row = 2
-    columns = 2
+    plt.suptitle('Difference in Intensity Between the Months 21-24 of the Two Datasets')
     image1 = cv2.imread('output/intensity_frequency_2005_21-24.png')
     image2 = cv2.imread('output/intensity_energy_2005_21-24.png')
     image3 = cv2.imread('output/intensity_frequency_2016_21-24.png')
@@ -94,11 +99,11 @@ if __name__ == '__main__':
     plt.axis('off')
 
     fig2.add_subplot(row, columns, 2)
-    plt.imshow(image2)
+    plt.imshow(image3)
     plt.axis('off')
 
     fig2.add_subplot(row, columns, 3)
-    plt.imshow(image3)
+    plt.imshow(image2)
     plt.axis('off')
 
     fig2.add_subplot(row, columns, 4)
@@ -107,32 +112,34 @@ if __name__ == '__main__':
 
     plt.savefig(f"./output/Months_21-24_groupings.png")
 
-    # plot figure 24 months
+    # computing plots for all 24 months for each dataset
+
     s1 = df_04
     s2 = df_15
-    helios.intensity_estimation_frequency(s1, False, levels=100)
-    helios.intensity_estimation_energy(s1, plot=False, levels=100)
-    helios.intensity_estimation_frequency(s2, plot=False, levels=100)
-    helios.intensity_estimation_energy(s2, plot=False, levels=100)
+    helios.intensity_estimation_frequency(s1, plot=True, show=False, scatter=False, levels=100)
+    helios.intensity_estimation_energy(s1, plot=True, show=False, scatter=False, levels=100)
+    helios.intensity_estimation_frequency(s2, plot=True, show=False, scatter=False, levels=100)
+    helios.intensity_estimation_energy(s2, plot=True, show=False, scatter=False, levels=100)
+
+    # plot months 1-24 for each dataset
 
     fig3 = plt.figure()
-    row = 2
-    columns = 2
+    plt.suptitle('Difference in Intensity Between the Two Entire Datasets')
     image1 = cv2.imread('output/intensity_frequency_2004_1-24.png')
     image2 = cv2.imread('output/intensity_energy_2004_1-24.png')
     image3 = cv2.imread('output/intensity_frequency_2015_1-24.png')
     image4 = cv2.imread('output/intensity_energy_2015_1-24.png')
 
     fig3.add_subplot(row, columns, 1)
-    plt.imshow(image1)
+    plt.imshow(image1, cmap='hot')
     plt.axis('off')
 
     fig3.add_subplot(row, columns, 2)
-    plt.imshow(image2)
+    plt.imshow(image3)
     plt.axis('off')
 
     fig3.add_subplot(row, columns, 3)
-    plt.imshow(image3)
+    plt.imshow(image2)
     plt.axis('off')
 
     fig3.add_subplot(row, columns, 4)
@@ -140,4 +147,3 @@ if __name__ == '__main__':
     plt.axis('off')
 
     plt.savefig(f"./output/Months_1-24_groupings.png")
-

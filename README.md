@@ -12,4 +12,5 @@
     - [x] Thresholds `d1` and `d2`
     - [x] Time Series for both types of hotspots 
 - [ ] Task 3: Change Analysis for Solar Flares
-    - [ ] Visual analysis of intensities 
+    - [x] Visual analysis of intensities 
+    - [ ] Basic Statistics
