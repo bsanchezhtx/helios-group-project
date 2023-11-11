@@ -8,10 +8,10 @@ from scipy import stats
 
 class Helios:
 
-    def __init__() -> None:
+    def __init__(self):
         pass
     
-    def __map_and_normalize(data):
+    def map_and_normalize(data):
         # maps energy band to average energy
         energy_band_mapping = {    
             '6-12': 9,
@@ -109,22 +109,22 @@ class Helios:
     # from task1.ipynb    
     # gets the energy based intensity values if plot=False,
     # or a plot if plot=True    
-    def intensity_estimation_energy(self, data, plot=False, scatter=True, levels=10):
+    def intensity_estimation_energy(self, plot=False, scatter=True, levels=10):
         # adding the new intensity values for the data
-        data = self.__map_and_normalize(data)
+        #data = self.__map_and_normalize(data)
 
         # energy-based intensity data
-        intensity = data['intensity.method.2'].values.flatten()
+        intensity = self['intensity.method.2'].values.flatten()
         # x and y values
-        x = data['x.pos.asec'].values.flatten()
-        y = data['y.pos.asec'].values.flatten()
+        x = self['x.pos.asec'].values.flatten()
+        y = self['y.pos.asec'].values.flatten()
 
         if plot:
             # new matplotlib figure
             fig, ax = plt.subplots()
             
             # seaborn kde plot, uses scipy gaussian_kde underneath
-            ax = sns.kdeplot(data=data, x='x.pos.asec', y='y.pos.asec', 
+            ax = sns.kdeplot(data=self, x='x.pos.asec', y='y.pos.asec',
                             weights='intensity.method.2', fill=True, levels=levels, 
                             thresh=0, cmap='inferno', cbar=True, bw_method='scott')
 
@@ -144,8 +144,8 @@ class Helios:
                 # plotting the scatterplot on top of the kde plot
                 plt.scatter(x, y, s=0.2, facecolor='white')
 
-            ax.set_title(f"Solar Flare Intensity Method 2 for Months {data['month'].min()}-{data['month'].max()}")
-            date_range = f"{data['year'].iloc[0]}_{data['month'].min()}-{data['month'].max()}"
+            ax.set_title(f"Solar Flare Intensity Method 2 for Months {self['month'].min()}-{self['month'].max()}")
+            date_range = f"{self['year'].iloc[0]}_{self['month'].min()}-{self['month'].max()}"
             plt.savefig(f"./output/intensity_energy_{date_range}.png")
             plt.show()
 
