@@ -29,12 +29,14 @@ model2 = LinearRegression()
 model2.fit(df_15x, df_15y)
 predict15 = model2.predict(df_15x)
 
+# 04-05 linear regression attempt, unused
 print("Intercept: \n", model1.intercept_)
 print("Coefficients: ")
 list(zip(df_04x, model1.coef_))
 print("Mean squared error: %.2f" % mean_squared_error(df_04y, predict04))
 print("Coefficient of determination: %.2f" % r2_score(df_04y, predict04))
 
+# 15-16 linear regression attempt, unused
 print("Intercept: \n", model2.intercept_)
 print("Coefficients: ")
 list(zip(df_15x, model2.coef_))
@@ -42,7 +44,7 @@ print("Mean squared error: %.2f" % mean_squared_error(df_15y, predict15))
 print("Coefficient of determination: %.2f" % r2_score(df_15y, predict15))
 
 
-
+# 04-05 scatter plot
 fig1, ax1 = plt.subplots(figsize=(6, 6))
 ax1.scatter(df_04x['duration.s'], df_04x['peak.c/s'], s = 5,  c=df_04y)
 plt.title('2004-2005 Scatter Plot Comparing Peak.c/s and Duration.s')
@@ -50,11 +52,13 @@ plt.ylabel('Peak.c/s')
 plt.xlabel('Duration.s')
 plt.savefig(f"./output/04_scatter.png", dpi = 300)
 
+# 04-05 histogram, unused
 fig3, axs3 = plt.subplots()
 axs3.hist(df_04y, bins=[0,1,2,3,4,5])
 plt.title('Histogram of 2004-05 Energy.kev in Numerical Categories')
 plt.savefig(f"./output/04_hist.png", dpi = 300)
 
+# 15-16 scatter plot
 fig2, ax2 = plt.subplots(figsize=(6,6))
 ax2.scatter(df_15x['duration.s'], df_15x['peak.c/s'], s = 5,  c=df_15y)
 plt.title('2015-2016 Scatter Plot Comparing Peak.c/s and Duration.s')
@@ -62,11 +66,13 @@ plt.ylabel('Peak.c/s')
 plt.xlabel('Duration.s')
 plt.savefig(f"./output/15_scatter.png", dpi = 300)
 
+# 15-16 histogram, unused
 fig4, axs4 = plt.subplots()
 axs4.hist(df_15y, bins=[0,1,2,3,4,5])
 plt.title('Histogram of 2015-16 Energy.kev in Numerical Categories')
 plt.savefig(f"./output/15_hist.png", dpi = 300)
 
+# print all plots
 plt.show()
 # peak.c/s
 # duration.s
