@@ -1,0 +1,9 @@
+# packages needed
+numpy
+pandas
+matplotlib
+seaborn
+scipy
+scikit-learn
+pillow
+opencv-python
