@@ -1,15 +1,10 @@
-import array
 
-import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn import preprocessing
-import statsmodels.api as sm
 import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy import stats
-from helios import Helios
+
 
 df_04 = pd.read_csv('dataset/Solar_flare_RHESSI_2004_05.csv')
 df_04x = df_04[['peak.c/s','duration.s']]
@@ -49,10 +44,18 @@ print("Coefficient of determination: %.2f" % r2_score(df_15y, predict15))
 
 
 fig1, ax1 = plt.subplots(figsize=(6, 6))
-ax1.scatter(df_04x['peak.c/s'], df_04x['duration.s'],s = 5,  c=df_04y)
+ax1.scatter(df_04x['duration.s'], df_04x['peak.c/s'], s = 5,  c=df_04y)
+plt.title('2004-2005 Scatter Plot Comparing Peak.c/s and Duration.s')
+plt.ylabel('Peak.c/s')
+plt.xlabel('Duration.s')
+plt.savefig(f"./output/04_scatter.png", dpi = 300)
 
 fig2, ax2 = plt.subplots(figsize=(6,6))
-ax2.scatter(df_15x['peak.c/s'], df_15x['duration.s'],s = 5,  c=df_15y)
+ax2.scatter(df_15x['duration.s'], df_15x['peak.c/s'], s = 5,  c=df_15y)
+plt.title('2015-2016 Scatter Plot Comparing Peak.c/s and Duration.s')
+plt.ylabel('Peak.c/s')
+plt.xlabel('Duration.s')
+plt.savefig(f"./output/15_scatter.png", dpi = 300)
 
 plt.show()
 # peak.c/s
