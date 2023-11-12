@@ -1,4 +1,4 @@
-
+import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
@@ -50,12 +50,22 @@ plt.ylabel('Peak.c/s')
 plt.xlabel('Duration.s')
 plt.savefig(f"./output/04_scatter.png", dpi = 300)
 
+fig3, axs3 = plt.subplots()
+axs3.hist(df_04y, bins=[0,1,2,3,4,5])
+plt.title('Histogram of 2004-05 Energy.kev in Numerical Categories')
+plt.savefig(f"./output/04_hist.png", dpi = 300)
+
 fig2, ax2 = plt.subplots(figsize=(6,6))
 ax2.scatter(df_15x['duration.s'], df_15x['peak.c/s'], s = 5,  c=df_15y)
 plt.title('2015-2016 Scatter Plot Comparing Peak.c/s and Duration.s')
 plt.ylabel('Peak.c/s')
 plt.xlabel('Duration.s')
 plt.savefig(f"./output/15_scatter.png", dpi = 300)
+
+fig4, axs4 = plt.subplots()
+axs4.hist(df_15y, bins=[0,1,2,3,4,5])
+plt.title('Histogram of 2015-16 Energy.kev in Numerical Categories')
+plt.savefig(f"./output/15_hist.png", dpi = 300)
 
 plt.show()
 # peak.c/s
